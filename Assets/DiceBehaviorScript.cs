@@ -29,26 +29,22 @@ public class DiceBehaviorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(state == State.ROLLING && IsStatic())
+        if(state == State.ROLLING && rigid.IsSleeping())
         {
+            Debug.Log("Update: Dice is static now.");
             SetResult();
             Debug.Log(result);
         }
-    }
-
-    private bool IsStatic()
-    {
-        return rigid.velocity.sqrMagnitude < 0.000001f && rigid.angularVelocity.sqrMagnitude < 0.000001f;
     }
 
     private int CalculateResultFromAngle()
     {
         if (transform.forward.y > THRESHHOLD) return 1;
         if (transform.up.y > THRESHHOLD) return 2;
-        if (transform.right.y > THRESHHOLD) return 3;
-        if (transform.forward.y < -THRESHHOLD) return 4;
+        if (transform.right.y > THRESHHOLD) return 4;
+        if (transform.forward.y < -THRESHHOLD) return 6;
         if (transform.up.y < -THRESHHOLD) return 5;
-        if (transform.right.y < -THRESHHOLD) return 6;
+        if (transform.right.y < -THRESHHOLD) return 3;
 
         return 0;
     }
@@ -60,11 +56,13 @@ public class DiceBehaviorScript : MonoBehaviour
 
     public void SetStateReady()
     {
+        Debug.Log("Set State Ready.");
         state = State.READY;
     }
 
     public void SetStateRolling()
     {
+        Debug.Log("Set State Rolling.");
         state = State.ROLLING;
     }
 
@@ -76,7 +74,9 @@ public class DiceBehaviorScript : MonoBehaviour
 
     public void SetResult()
     {
+        Debug.Log("Set Result.");
         result = faces[CalculateResultFromAngle() - 1];
         state = State.ROLLED;
+        Debug.Log(result);
     }
 }
