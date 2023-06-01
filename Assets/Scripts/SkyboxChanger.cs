@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkyboxChangerBehaviour : MonoBehaviour
+public class SkyboxChanger : MonoBehaviour
 {
     public enum Cities
     {

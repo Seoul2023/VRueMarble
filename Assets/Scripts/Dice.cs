@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class DiceBehaviorScript : MonoBehaviour
+public class Dice : MonoBehaviour
 {
+    public GameManager gm;
     private const float THRESHHOLD = 0.70f;
     public enum State
     {
@@ -77,6 +78,6 @@ public class DiceBehaviorScript : MonoBehaviour
         Debug.Log("Set Result.");
         result = faces[CalculateResultFromAngle() - 1];
         state = State.ROLLED;
-        Debug.Log(result);
+        gm.OnDiceRolled();
     }
 }
