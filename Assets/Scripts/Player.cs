@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
+    public TMP_Text money_text;
     private const int default_money = 10000;
     private const int max_board = 20;
 
@@ -21,7 +23,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        money_text.text = "Money: " + money.ToString();
     }
 
     public int getMoney()
