@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject palmUI;
+    [SerializeField] private GameObject decisionUI;
     [SerializeField] private GameObject left_controller;
 
     private Vector3 lc_rotation;

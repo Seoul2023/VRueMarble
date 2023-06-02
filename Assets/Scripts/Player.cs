@@ -6,8 +6,12 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     public TMP_Text money_text;
+    public GameManager gm;
+    public UIManager um;
     private const int default_money = 10000;
     private const int max_board = 20;
+    private const float T = 3f; // flight time for Move()
+    private const float g = 9.8f;
 
     private int money = 0;
     private int curr_pos = 0;
@@ -40,8 +44,13 @@ public class Player : MonoBehaviour
         owned_boards.Add(new_board);
     }
 
-    public void Move(int dice_result)
+    public void Move(Board target)
     {
-
+        Vector3 direction = target.transform.position - transform.position;
+        float vx = direction.x / T;
+        float vy = direction.y / T;
+        float vz = T * g / 2;
+        Vector3 launchVelocity = new Vector3(vx, vy, vz);
+        
     }
 }
