@@ -1,11 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject palmUI;
-    [SerializeField] private GameObject decisionUI;
+    [Header("Palm UI Components")]
+    [SerializeField] private GameObject PalmUI;
+    [SerializeField] private TMP_Text PalmMoney;
+    [Header("Decision UI Components")]
+    [SerializeField] private GameObject DecisionUI;
+    [SerializeField] private TMP_Text DecisionTitle;
+    [SerializeField] private Toggle[] DecisionToggles;
+    [SerializeField] private TMP_Text DecisionMoneyInHand;
+    [SerializeField] private TMP_Text DecisionMoneyRequired;
+    [SerializeField] private TMP_Text DecisionMoneyRemain;
+    [SerializeField] private Button OKButton;
     [SerializeField] private GameObject left_controller;
 
     private Vector3 lc_rotation;
@@ -27,11 +38,16 @@ public class UIManager : MonoBehaviour
 
         if (lc_yrange && lc_zrange)
         {
-            palmUI.SetActive(true);
+            PalmUI.SetActive(true);
         }
         else
         {
-            palmUI.SetActive(false);
+            PalmUI.SetActive(false);
         }
+    }
+
+    public void OnWaitDecision(Board target)
+    {
+
     }
 }

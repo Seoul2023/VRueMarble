@@ -774,7 +774,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe89e57efe614d94b9338330345180b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  palmUI: {fileID: 823403750}
+  PalmUI: {fileID: 823403750}
+  PalmMoney: {fileID: 853387357}
+  DecisionUI: {fileID: 1992714621}
+  DecisionTitle: {fileID: 2005075977}
+  DecisionToggles:
+  - {fileID: 314701855}
+  - {fileID: 1699350834}
+  - {fileID: 1374838291}
+  - {fileID: 930500420}
+  DecisionMoneyInHand: {fileID: 1397696553}
+  DecisionMoneyRequired: {fileID: 723683135}
+  DecisionMoneyRemain: {fileID: 1804843334}
+  OKButton: {fileID: 177210058}
   left_controller: {fileID: 2090236703}
 --- !u!4 &398915384
 Transform:
@@ -1325,7 +1337,7 @@ GameObject:
   - component: {fileID: 723683136}
   - component: {fileID: 723683135}
   m_Layer: 5
-  m_Name: Need
+  m_Name: Required
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1371,7 +1383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Need:'
+  m_text: 'Required:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2185,6 +2197,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money_text: {fileID: 853387357}
+  gm: {fileID: 0}
+  um: {fileID: 0}
 --- !u!1 &1187536004
 GameObject:
   m_ObjectHideFlags: 0

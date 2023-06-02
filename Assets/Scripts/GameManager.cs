@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         if (state == State.player_rolling || state == State.cpu_rolling) 
         {
             dice_result = dice.GetResult();
-            player.Move(dice_result);
+            // player.Move(dice_result);
             state = State.player_waiting;
         }
     }
