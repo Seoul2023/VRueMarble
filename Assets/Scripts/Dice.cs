@@ -5,17 +5,21 @@ using System;
 
 public class Dice : MonoBehaviour
 {
-    public GameManager gm;
     private const float THRESHHOLD = 0.70f;
-    public enum State
+    public enum DiceState
     {
-        READY,
-        ROLLING,
+        BEFORE_READY,
+        READY,      // grabbed(onSelect) by hand
+        ROLLING,    // exited select
         ROLLED
     }
     private int[] faces = { 1, 2, 3, 4, 5, 6 };
-    private State state = State.ROLLED;
+    private DiceState state = DiceState.BEFORE_READY;
     private int result = 0;
+    public int Result
+    {
+        get { return result; }
+    }
 
     [SerializeField] private Rigidbody rigid;
     public Vector3 startPosition = Vector3.zero;
@@ -23,18 +27,18 @@ public class Dice : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = State.ROLLED;
-        Debug.Log("Start");
+        state = DiceState.BEFORE_READY;
+        Debug.Log("Dice: Start");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(state == State.ROLLING && rigid.IsSleeping())
+        if(state == DiceState.ROLLING && rigid.IsSleeping())
         {
-            Debug.Log("Update: Dice is static now.");
+            Debug.Log("Dice: Dice is static now.");
             SetResult();
-            Debug.Log(result);
+            Debug.Log("Dice: The result is " + result.ToString());
         }
     }
 
@@ -50,34 +54,20 @@ public class Dice : MonoBehaviour
         return 0;
     }
 
-    public int GetState()
+    private void SetResult()
     {
-        return (int)state;
-    }
-
-    public void SetStateReady()
-    {
-        Debug.Log("Set State Ready.");
-        state = State.READY;
-    }
-
-    public void SetStateRolling()
-    {
-        Debug.Log("Set State Rolling.");
-        state = State.ROLLING;
-    }
-
-    public int GetResult()
-    {
-        if (state != State.ROLLED) return -1;
-        return result;
-    }
-
-    public void SetResult()
-    {
-        Debug.Log("Set Result.");
+        Debug.Log("Dice: Set Result.");
         result = faces[CalculateResultFromAngle() - 1];
-        state = State.ROLLED;
-        gm.OnDiceRolled();
+        state = DiceState.ROLLED;
+    }
+
+    public bool IsRolled()
+    {
+        return state == DiceState.ROLLED;
+    }
+
+    public void SetBeforeReady()
+    {
+        state = DiceState.BEFORE_READY;
     }
 }

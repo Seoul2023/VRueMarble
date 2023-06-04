@@ -10,7 +10,24 @@ public class Structure : MonoBehaviour
         Building,
         Hotel
     }
-    private StructureType type;
+    public GameObject structure;
+    [SerializeField] private StructureType type;
+    [SerializeField] private int cost;
+    private bool is_built = false;
+    public bool IsBuilt
+    {
+        get { return is_built; }
+        set { is_built = value; }
+    }
+    public int Cost
+    {
+        get { return cost; }
+    }
+    [SerializeField] private int rent;
+    public int Rent
+    {
+        get { return rent; }
+    }
 
     // Start is called before the first frame update
     void Start()

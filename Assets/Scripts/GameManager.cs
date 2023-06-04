@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private enum State
+    public enum GameState
     {
+        none,
         player_rolling,
-        //player_moving,
+        player_moving,
         player_waiting,
         player_do,
         player_end,
@@ -17,13 +18,17 @@ public class GameManager : MonoBehaviour
         cpu_do,
         cpu_end
     }
-    private State state;
-    private int dice_result;
+    private const int MAXBOARDNUM = 24;
+
+    private GameState state = GameState.none;
+    private int diceResult = 0;
+    private int target_pos = 0;
 
     [SerializeField] private Player player, cpu;
     [SerializeField] private Board[] map;
     [SerializeField] private Dice dice;
-    [SerializeField] private SkyboxChanger skybox_changer;
+    [SerializeField] private SkyboxChanger skyboxChanger;
+    [SerializeField] private DecisionUI decisionUI;
 
     // Start is called before the first frame update
     void Start()
@@ -36,36 +41,96 @@ public class GameManager : MonoBehaviour
     {
         switch (state)
         {
-            case State.player_rolling:
+            case GameState.player_rolling:
+                if(dice.IsRolled())
+                {
+                    Debug.Log("GM: dice rolled!");
+                    diceResult = dice.Result;
+                    MovePlayer();
+                }
                 break;
-            //case State.player_moving:
-            //    break;
-            case State.player_waiting:
+            case GameState.player_moving:
                 break;
-            case State.player_do:
+            case GameState.player_waiting:
                 break;
-            case State.player_end:
+            case GameState.player_do:
+                break;
+            case GameState.player_end:
                 break;
         }
     }
 
     void Init()
     {
-        state = State.player_rolling;
+        state = GameState.player_rolling;
+        decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
     }
 
-    public void OnDiceRolled() 
+    private void MovePlayer()
     {
-        if (state == State.player_rolling || state == State.cpu_rolling) 
+        Debug.Log("GM: Start player move");
+        state = GameState.player_waiting;
+
+        target_pos = (player.CurrentPosition + diceResult) % MAXBOARDNUM;
+        player.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
+    }
+
+    private void StartPlayerDecision(bool needToWait)
+    {
+        state = GameState.player_waiting;
+        if(needToWait)
         {
-            dice_result = dice.GetResult();
-            // player.Move(dice_result);
-            state = State.player_waiting;
+            decisionUI.TurnOn(player, map[target_pos]);
+        }
+        else
+        {
+            EndTurn();
+        }
+    }
+    
+    public void EndPlayerDecision()
+    {
+        if(state != GameState.player_waiting)
+        {
+            Debug.Log("GM: Improper state for EndPlayerDecision");
+        }
+        Debug.Log("GM: End player decision");
+        int remainedMoney = decisionUI.Remain;
+        List<bool> decisions = decisionUI.GetDecisions();
+        decisionUI.TurnOff();
+
+        if(decisions.Count < 4)
+        {
+            Debug.Log("GM: Not enough decisions in EndPlayerDecision");
+            EndTurn();
+        }
+
+        player.Money = remainedMoney;
+        if (decisions[0]) player.AddBoard(map[target_pos]);
+        if (decisions[1]) map[target_pos].BuildVilla();
+        if (decisions[2]) map[target_pos].BuildBuilding();
+        if (decisions[3]) map[target_pos].BuildHotel();
+
+        EndTurn();
+    }
+
+    private void EndTurn()
+    {
+        Debug.Log("GM: End turn");
+        state = GameState.player_end;
+        if(IsEnd())
+        {
+            Debug.Log("GM: Game End!");
+        }
+        else
+        {
+            dice.SetBeforeReady();
+            state = GameState.player_rolling;
         }
     }
 
-    public void OnPlayerDecided()
+    public bool IsEnd()
     {
-
+        return player.Money < 0 || cpu.Money < 0;
     }
 }
