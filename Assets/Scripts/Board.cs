@@ -6,6 +6,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     private string city_name;
+    [SerializeField] private GroundFlag Flag;
     [SerializeField] private Structure Villa;
     [SerializeField] private Structure Building;
     [SerializeField] private Structure Hotel;
@@ -31,6 +32,7 @@ public class Board : MonoBehaviour
         Villa.structure.SetActive(false);
         Building.structure.SetActive(false);
         Hotel.structure.SetActive(false);
+        Flag.SetActive(false);
     }
 
     // Update is called once per frame
@@ -91,18 +93,33 @@ public class Board : MonoBehaviour
         return Hotel.IsBuilt;
     }
 
+    public void BuyGround()
+    {
+        if(owner.transform.name == "cpu")
+        {
+            Flag.BuildCPUFlag();
+        }
+        else
+        {
+            Flag.BuildPlayerFlag();
+        }
+    }
+
     public void BuildVilla()
     {
         Villa.structure.SetActive(true);
+        Villa.SetColor(owner.transform.name != "cpu");
     }
 
     public void BuildBuilding()
     {
         Building.structure.SetActive(true);
+        Building.SetColor(owner.transform.name != "cpu");
     }
 
     public void BuildHotel()
     {
         Hotel.structure.SetActive(true);
+        Hotel.SetColor(owner.transform.name != "cpu");
     }
 }

@@ -106,7 +106,11 @@ public class GameManager : MonoBehaviour
         }
 
         player.Money = remainedMoney;
-        if (decisions[0]) player.AddBoard(map[target_pos]);
+        if (decisions[0]) 
+        { 
+            player.AddBoard(map[target_pos]);
+            map[target_pos].BuyGround();
+        }
         if (decisions[1]) map[target_pos].BuildVilla();
         if (decisions[2]) map[target_pos].BuildBuilding();
         if (decisions[3]) map[target_pos].BuildHotel();
@@ -124,6 +128,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            dice.transform.position = player.transform.position;
             dice.SetBeforeReady();
             state = GameState.player_rolling;
         }
