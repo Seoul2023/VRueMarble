@@ -66,8 +66,18 @@ public class Dice : MonoBehaviour
         return state == DiceState.ROLLED;
     }
 
-    public void SetBeforeReady()
+    public void SetStateBeforeReady()
     {
         state = DiceState.BEFORE_READY;
+    }
+
+    public void SetStateReady()
+    {
+        state = DiceState.READY;
+    }
+
+    public void SetStateRolling()
+    {
+        state = DiceState.ROLLING;
     }
 }

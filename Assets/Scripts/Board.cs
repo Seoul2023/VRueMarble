@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    private string city_name;
     [SerializeField] private GroundFlag Flag;
     [SerializeField] private Structure Villa;
     [SerializeField] private Structure Building;
@@ -18,6 +17,16 @@ public class Board : MonoBehaviour
     [SerializeField] private int cost;
     [SerializeField] private int ground_rent;
 
+    public enum BoardType
+    {
+        City,
+        Teleport,
+        Start,
+        Island,
+        Olympic,
+        Airport
+    }
+    public BoardType type;
     private Player owner = null;
     public Player Owner
     {
@@ -29,10 +38,13 @@ public class Board : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Villa.structure.SetActive(false);
-        Building.structure.SetActive(false);
-        Hotel.structure.SetActive(false);
-        Flag.SetActive(false);
+        if (type == BoardType.City)
+        {
+            Villa.structure.SetActive(false);
+            Building.structure.SetActive(false);
+            Hotel.structure.SetActive(false);
+            Flag.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -40,7 +52,50 @@ public class Board : MonoBehaviour
     {
         
     }
+    public void OnPlayer(Player player, Action<Boolean> next)
+    {
+        switch (type)
+        {
+            case BoardType.City:
+                OnPlayerCity(player, next);
+                break;
+            case BoardType.Teleport:
+                next(false);
+                break;
+            case BoardType.Start:
+                next(false);
+                break;
+            case BoardType.Island:
+                next(false);
+                break;
+            case BoardType.Olympic:
+                break;
+            case BoardType.Airport:
+                break;
+        }
+    }
 
+    public void BoardWork(Player player)
+    {
+
+    }
+
+    // City type
+    private void OnPlayerCity(Player player, Action<Boolean> next)
+    {
+        if (owner is null)
+        {
+            next(true);
+        }
+        else if (player.name == owner.name)
+        {
+            next(!Hotel.IsBuilt);
+        }
+        else
+        {
+            next(false);
+        }
+    }
     public int GetCost(bool ground, bool villa, bool building, bool hotel)
     {
         int sumOfCost = cost;
@@ -60,24 +115,6 @@ public class Board : MonoBehaviour
         return toll;
     }
 
-    public void OnPlayer(Player player, Action<Boolean> next)
-    {
-        if (owner is null)
-        {
-
-            next(true);
-        }
-        else if (player.transform.name == owner.transform.name)
-        {
-
-            next(false);
-        }
-        else
-        {
-            next(false);
-        }
-    }
-
     public bool IsBuiltVilla()
     {
         return Villa.IsBuilt;
@@ -95,7 +132,7 @@ public class Board : MonoBehaviour
 
     public void BuyGround()
     {
-        if(owner.transform.name == "cpu")
+        if(owner.name == "cpu")
         {
             Flag.BuildCPUFlag();
         }
@@ -108,18 +145,28 @@ public class Board : MonoBehaviour
     public void BuildVilla()
     {
         Villa.structure.SetActive(true);
-        Villa.SetColor(owner.transform.name != "cpu");
+        Villa.SetColor(owner.name != "cpu");
     }
 
     public void BuildBuilding()
     {
         Building.structure.SetActive(true);
-        Building.SetColor(owner.transform.name != "cpu");
+        Building.SetColor(owner.name != "cpu");
     }
 
     public void BuildHotel()
     {
         Hotel.structure.SetActive(true);
-        Hotel.SetColor(owner.transform.name != "cpu");
+        Hotel.SetColor(owner.name != "cpu");
     }
+
+    // Teleport type
+
+    // Start type
+
+    // Island type
+
+    // Olympic type
+
+    // Airport type
 }

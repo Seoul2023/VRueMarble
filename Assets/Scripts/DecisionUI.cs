@@ -16,7 +16,7 @@ public class DecisionUI : MonoBehaviour
 
     private const string MoneyInHand = "Money in hand: ";
     private int moneyInHand = 0;
-    private const string MoneyRequired = "Money requiredL: ";
+    private const string MoneyRequired = "Money required: ";
     private int moneyRequired = 0;
     private const string MoneyRemain = "Money remain: ";
     private int moneyRemain = 0;
@@ -94,6 +94,7 @@ public class DecisionUI : MonoBehaviour
     public void TurnOn(Player p, Board b)
     {
         moneyInHand = p.Money;
+        MoneyInHandTMP.text = MoneyString(MoneyInHand, moneyInHand);
         target = b;
         main.SetActive(true);
     }

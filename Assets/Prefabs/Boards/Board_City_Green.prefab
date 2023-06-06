@@ -145,16 +145,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 615253444592246922}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7107c4bb4beb7d2489e21384929742fe, type: 3}
+  m_Script: {fileID: 11500000, guid: b0300170b7364c84a85b1895f6f003ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Flag: {fileID: 8814005660340197172}
   Villa: {fileID: 6941924147971105398}
   Building: {fileID: 2717991899933883281}
   Hotel: {fileID: 4886490963441007097}
-  position: 1
+  position: 0
   cost: 0
   ground_rent: 0
+  type: 0
 --- !u!1 &615253445643084114
 GameObject:
   m_ObjectHideFlags: 0

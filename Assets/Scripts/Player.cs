@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     public TMP_Text money_text;
     public XROrigin xrOrigin;
+    public string name;
     private const int DEFAULTMONEY = 10000;
     private const int MAXBOARDNUM = 24;
     private const float T = 3f; // flight time for Move()
@@ -31,14 +32,20 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.money = DEFAULTMONEY;
-        this.owned_boards = new List<Board>();
+        if (name == "player")
+        {
+            this.money = DEFAULTMONEY;
+            this.owned_boards = new List<Board>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        money_text.text = "Money: " + money.ToString();
+        if (name == "player")
+        {
+            money_text.text = "Money: " + money.ToString();
+        }
     }
 
     public void AddBoard(Board b)
@@ -59,7 +66,7 @@ public class Player : MonoBehaviour
         // teleport move
         // need to add offsets;
         Vector3 targetPosition = target.transform.position;
-        xrOrigin.transform.position = new Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+        xrOrigin.transform.position = new Vector3(targetPosition.x, targetPosition.y, targetPosition.z + 10);
         target.OnPlayer(this, next);
     }
 }

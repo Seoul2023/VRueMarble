@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
     private int target_pos = 0;
 
     [SerializeField] private Player player, cpu;
-    [SerializeField] private Board[] map;
+    [SerializeField] private GameObject entire_map;
+    private Board[] map;
     [SerializeField] private Dice dice;
     [SerializeField] private SkyboxChanger skyboxChanger;
     [SerializeField] private DecisionUI decisionUI;
@@ -62,8 +63,11 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
+        Debug.Log("GM: Init");
         state = GameState.player_rolling;
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
+        map = entire_map.GetComponentsInChildren<Board>();
+        
     }
 
     private void MovePlayer()
@@ -77,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     private void StartPlayerDecision(bool needToWait)
     {
+        Debug.Log("GM: Start Player Decision");
         state = GameState.player_waiting;
         if(needToWait)
         {
@@ -88,7 +93,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void EndPlayerDecision()
+    private void EndPlayerDecision()
     {
         if(state != GameState.player_waiting)
         {
@@ -118,6 +123,11 @@ public class GameManager : MonoBehaviour
         EndTurn();
     }
 
+    private void DoBoardWork()
+    {
+
+    }
+
     private void EndTurn()
     {
         Debug.Log("GM: End turn");
@@ -129,7 +139,7 @@ public class GameManager : MonoBehaviour
         else
         {
             dice.transform.position = player.transform.position;
-            dice.SetBeforeReady();
+            dice.SetStateBeforeReady();
             state = GameState.player_rolling;
         }
     }

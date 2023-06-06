@@ -511,7 +511,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6711456878712639084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7107c4bb4beb7d2489e21384929742fe, type: 3}
+  m_Script: {fileID: 11500000, guid: b0300170b7364c84a85b1895f6f003ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Flag: {fileID: 9218345565370374967}
@@ -521,6 +521,7 @@ MonoBehaviour:
   position: 0
   cost: 0
   ground_rent: 0
+  type: 0
 --- !u!1 &7718240551153570896
 GameObject:
   m_ObjectHideFlags: 0
