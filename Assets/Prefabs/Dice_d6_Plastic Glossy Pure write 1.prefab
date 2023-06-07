@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d045dbd84004a347842772657a03c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigid: {fileID: 0}
+  rigid: {fileID: 7238306851275776090}
   startPosition: {x: 0, y: 0, z: 0}
 --- !u!54 &7238306851275776090
 Rigidbody:

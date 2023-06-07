@@ -38,7 +38,6 @@ public class DecisionUI : MonoBehaviour
     {
         if(target != null)
         {
-            LockToggles(target);
             moneyRequired = SumUpCosts(target);
             moneyRemain = moneyInHand - moneyRequired;
             MoneyRequiredTMP.text = MoneyString(MoneyRequired, moneyRequired);
@@ -55,23 +54,23 @@ public class DecisionUI : MonoBehaviour
     {
         if (b.Owner != null)
         {
-            Toggles[0].enabled = true;
-            Toggles[0].interactable = false;
+            Toggles[0].isOn = true;
+            Toggles[0].enabled = false;
         }
         if (b.IsBuiltVilla())
         {
-            Toggles[1].enabled = true;
-            Toggles[1].interactable = false;
+            Toggles[1].isOn = true;
+            Toggles[1].enabled = false;
         }
         if (b.IsBuiltBuilding())
         {
-            Toggles[2].enabled = true;
-            Toggles[2].interactable = false;
+            Toggles[2].isOn = true;
+            Toggles[2].enabled = false;
         }
         if (b.IsBuiltHotel())
         {
-            Toggles[3].enabled = true;
-            Toggles[3].interactable = false;
+            Toggles[3].isOn = true;
+            Toggles[3].enabled = false;
         }
     }
 
@@ -80,23 +79,23 @@ public class DecisionUI : MonoBehaviour
         foreach(Toggle t in Toggles)
         {
             t.enabled = true;
-            t.interactable = true;
+            t.isOn = false;
         }
     }
 
     private int SumUpCosts(Board b)
-    {
-        int sumOfCosts = 0;
-
-        return sumOfCosts;
+    {   
+        return b.GetCost(Toggles[0].isOn, Toggles[1].isOn, Toggles[2].isOn, Toggles[3].isOn);
     }
 
     public void TurnOn(Player p, Board b)
     {
+        Debug.Log("DecisionUI: Turn on with " + p.ToString() + b.ToString());
         moneyInHand = p.Money;
         MoneyInHandTMP.text = MoneyString(MoneyInHand, moneyInHand);
         target = b;
         main.SetActive(true);
+        LockToggles(target);
     }
 
     public void TurnOff()
@@ -111,7 +110,7 @@ public class DecisionUI : MonoBehaviour
         List<bool> ret = new();
         foreach(Toggle t in Toggles)
         {
-            ret.Add(t.interactable && t.enabled);
+            ret.Add(t.isOn && t.enabled);
         }
 
         return ret;

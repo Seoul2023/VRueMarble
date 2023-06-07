@@ -76,6 +76,8 @@ public class GameManager : MonoBehaviour
         state = GameState.player_waiting;
 
         target_pos = (player.CurrentPosition + diceResult) % MAXBOARDNUM;
+        player.CurrentPosition = target_pos;
+        skyboxChanger.SetSkybox(target_pos);
         player.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
     }
 
