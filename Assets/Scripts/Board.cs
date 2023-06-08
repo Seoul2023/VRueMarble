@@ -22,6 +22,7 @@ public class Board : MonoBehaviour
     }
     [SerializeField] private int cost;
     [SerializeField] private int ground_rent;
+    [SerializeField] private AudioSource bgAudio;
 
     public enum BoardType
     {
@@ -60,6 +61,10 @@ public class Board : MonoBehaviour
     }
     public void OnPlayer(Player player, Action<Boolean> next)
     {
+        if (player.name == "player" && bgAudio != null)
+        {
+            bgAudio.Play();
+        }
         switch (type)
         {
             case BoardType.City:
@@ -107,6 +112,11 @@ public class Board : MonoBehaviour
                 return -1;
         }
         return -1;
+    }
+
+    public void PauseAudio()
+    {
+        if (bgAudio != null) bgAudio.Pause();
     }
 
     // City type

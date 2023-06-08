@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
         // need to add offsets;
         Vector3 targetPosition = target.transform.position;
         //xrOrigin.transform.position = new Vector3(targetPosition.x, targetPosition.y + 10, targetPosition.z);
-        transform.position = new Vector3(targetPosition.x, targetPosition.y + 10, targetPosition.z);
+        transform.position = new Vector3(targetPosition.x, targetPosition.y + 1f, targetPosition.z);
         target.OnPlayer(this, next);
     }
 }

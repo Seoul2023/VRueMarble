@@ -23,6 +23,7 @@ public class Dice : MonoBehaviour
     }
 
     [SerializeField] private Rigidbody rigid;
+    [SerializeField] private AudioSource hitSound;
     public Vector3 startPosition = Vector3.zero;
     
     // Start is called before the first frame update
@@ -41,6 +42,12 @@ public class Dice : MonoBehaviour
             SetResult();
             Debug.Log("Dice: The result is " + result.ToString());
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("dice collision");
+        hitSound.Play();
     }
 
     private int CalculateResultFromAngle()

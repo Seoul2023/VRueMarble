@@ -45,27 +45,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skyboxMaterials:
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: 75d905c9d6a30de41a2a394ae387de99, type: 2}
   - {fileID: 2100000, guid: 51c5890df5530fb498eff057e444678c, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: 67bacb2b7aa9fed439b65e4313c052ca, type: 2}
   - {fileID: 2100000, guid: 397f54d3d9d1df64288df406143add0c, type: 2}
   - {fileID: 2100000, guid: 7b3d4268ef796534aa54559922cde67a, type: 2}
   - {fileID: 2100000, guid: 6e96fce63518a1648bfb019cab12b97d, type: 2}
   - {fileID: 2100000, guid: cb4144a6ab6085242b87d18f775d10da, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: 6ef469410ce8d22429854124be5dc33d, type: 2}
   - {fileID: 2100000, guid: 7a5b8bc75428df74093c6eead6cc5330, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: 51ac979e59775a149b18b179aab7d41e, type: 2}
   - {fileID: 2100000, guid: bf9d7011504633e4c92f4d189dd8d7cf, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: b0e13639f61ea4a4fbc984f3eab6e201, type: 2}
   - {fileID: 2100000, guid: 991bd17ce2fae8145bbb6168879e5828, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: b74a7cddbe6c3da4b95cd00212949d96, type: 2}
   - {fileID: 2100000, guid: a7c32fda566d71e4398539bd0895f3f3, type: 2}
-  - {fileID: 2100000, guid: 072a77a7d0d1d2d42b7f3c35a5667c9f, type: 2}
+  - {fileID: 2100000, guid: 06b2a4f6cf1eb46e3877e0e41ed1fb9f, type: 2}
   - {fileID: 2100000, guid: 6b6df279d5e5f6d4ab47119ae9db171a, type: 2}
   - {fileID: 2100000, guid: fa54630473440d94e976c382a5167554, type: 2}
