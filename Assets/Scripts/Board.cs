@@ -83,7 +83,7 @@ public class Board : MonoBehaviour
                 next(false);
                 break;
             case BoardType.Airport:
-                next(true);
+                OnPlayerAirport(player, next);
                 break;
         }
     }
@@ -208,4 +208,9 @@ public class Board : MonoBehaviour
     // Olympic type
 
     // Airport type
+    public void OnPlayerAirport(Player player, Action<Boolean> next)
+    {
+        // Todo: Make Airport UI and impl
+        next(true);
+    }
 }

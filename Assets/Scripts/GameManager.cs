@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         else
         {
             playerInTurn.IslandCount = 0;
-            map[target_pos].PauseAudio();
+            map[playerInTurn.CurrentPosition].PauseAudio();
             target_pos = playerInTurn.CurrentPosition + diceResult;
             if (target_pos >= MAXBOARDNUM)
             {
