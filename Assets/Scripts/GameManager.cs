@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private int target_pos = 0;
 
     [SerializeField] private Player player, cpu;
+    private Player playerInTurn, playerInWait;
     [SerializeField] private GameObject entire_map;
     private Board[] map;
     [SerializeField] private Dice dice;
@@ -67,37 +68,56 @@ public class GameManager : MonoBehaviour
         state = GameState.player_rolling;
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
         map = entire_map.GetComponentsInChildren<Board>();
-        
+        playerInTurn = player; playerInWait = cpu;
     }
 
     private void MovePlayer()
     {
+        if (state != GameState.player_rolling && state != GameState.cpu_rolling) 
+        {
+            Debug.Log("GM: Error! Wrong state in MovePlayer()");
+            EndTurn();
+        }
         Debug.Log("GM: Start player move");
-        state = GameState.player_waiting;
+        playerInTurn = (state == GameState.player_rolling) ? player : cpu;
+        playerInWait = (state == GameState.player_rolling) ? cpu : player;
+        state = (state == GameState.player_rolling) ? GameState.player_moving : GameState.cpu_moving;
 
-        target_pos = (player.CurrentPosition + diceResult) % MAXBOARDNUM;
-        player.CurrentPosition = target_pos;
+        target_pos = (playerInTurn.CurrentPosition + diceResult) % MAXBOARDNUM;
+        playerInTurn.CurrentPosition = target_pos;
         skyboxChanger.SetSkybox(target_pos);
-        player.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
+        playerInTurn.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
     }
 
     private void StartPlayerDecision(bool needToWait)
     {
         Debug.Log("GM: Start Player Decision");
-        state = GameState.player_waiting;
-        if(needToWait)
+        if (state == GameState.player_moving)
         {
-            decisionUI.TurnOn(player, map[target_pos]);
+            state = GameState.player_waiting;
+            if (needToWait)
+            {
+                decisionUI.TurnOn(player, map[target_pos]);
+            }
+            else
+            {
+                DoBoardWork();
+            }
+        }
+        else if (state == GameState.cpu_moving)
+        {
+            state = GameState.cpu_waiting;
         }
         else
         {
+            Debug.Log("GM: Error! Wrong state in StartPlayerDecision()");
             EndTurn();
         }
     }
     
     private void EndPlayerDecision()
     {
-        if(state != GameState.player_waiting)
+        if(state != GameState.player_waiting && state != GameState.cpu_waiting)
         {
             Debug.Log("GM: Improper state for EndPlayerDecision");
         }
@@ -127,7 +147,12 @@ public class GameManager : MonoBehaviour
 
     private void DoBoardWork()
     {
-
+        state = GameState.player_do;
+        int ret = map[target_pos].BoardWork(playerInTurn, playerInWait);
+        if (ret != -1)
+        {
+            playerInTurn.Move(map[ret], (b) => { EndTurn(); });
+        } else { EndTurn(); }
     }
 
     private void EndTurn()

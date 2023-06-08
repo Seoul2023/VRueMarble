@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
@@ -74,15 +75,35 @@ public class Board : MonoBehaviour
                 next(false);
                 break;
             case BoardType.Olympic:
+                next(false);
                 break;
             case BoardType.Airport:
+                next(true);
                 break;
         }
     }
 
-    public void BoardWork(Player player)
+    public int BoardWork(Player playerInTurn, Player playerInWait)
     {
-
+        switch (type)
+        {
+            case BoardType.City:
+                int movedMoney = GetToll();
+                playerInTurn.Money -= movedMoney;
+                playerInWait.Money += movedMoney;
+                return -1;
+            case BoardType.Teleport:
+                return (int)Random.Range(0, 23);
+            case BoardType.Start:
+                return -1;
+            case BoardType.Island:
+                return -1;
+            case BoardType.Olympic:
+                return -1;
+            case BoardType.Airport:
+                return -1;
+        }
+        return -1;
     }
 
     // City type
