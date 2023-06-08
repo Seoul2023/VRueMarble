@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random = UnityEngine.Random;
 
 public class Dice : MonoBehaviour
 {
@@ -78,6 +79,15 @@ public class Dice : MonoBehaviour
 
     public void SetStateRolling()
     {
+        state = DiceState.ROLLING;
+    }
+
+    public void RollDice()
+    {
+        Vector3 force = new(Random.Range(-500f, 500f),Random.Range(1000f, 2000f), Random.Range(-500f, 500f));
+        Vector3 torque = new(Random.Range(-500f, 500f), Random.Range(-500f, 500f), Random.Range(-500f, 500f));
+        rigid.AddForce(force);
+        rigid.AddTorque(torque);
         state = DiceState.ROLLING;
     }
 }

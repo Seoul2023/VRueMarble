@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (dice.transform.position.y < -100.0f)
+        {
+            dice.transform.Translate(Vector3.up * 200.0f);
+        }
         switch (state)
         {
             case GameState.player_rolling:
@@ -58,6 +62,14 @@ public class GameManager : MonoBehaviour
             case GameState.player_do:
                 break;
             case GameState.player_end:
+                break;
+            case GameState.cpu_rolling:
+                if (dice.IsRolled())
+                {
+                    Debug.Log("GM: dice rolled!");
+                    diceResult = dice.Result;
+                    MovePlayer();
+                }
                 break;
         }
     }
@@ -111,6 +123,8 @@ public class GameManager : MonoBehaviour
             if (needToWait)
             {
 
+
+                EndTurn();
             }
             else
             {
@@ -161,6 +175,7 @@ public class GameManager : MonoBehaviour
         int ret = map[target_pos].BoardWork(playerInTurn, playerInWait);
         if (ret != -1)
         {
+            // teleport board
             playerInTurn.Move(map[ret], (b) => { EndTurn(); });
         } else { EndTurn(); }
     }
@@ -175,9 +190,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            dice.transform.position = playerInTurn.transform.position;
+            Vector3 playerPosition = player.transform.position;
+            dice.transform.position = new Vector3(playerPosition.x, playerPosition.y + 10f, playerPosition.z);
             dice.SetStateBeforeReady();
-            state = (state == GameState.player_end) ? GameState.player_rolling : GameState.cpu_rolling;
+            state = (state == GameState.player_end) ? GameState.cpu_rolling : GameState.player_rolling;
+            Debug.Log(state.ToString());
+
+            if (state == GameState.cpu_rolling)
+            {
+                dice.RollDice();
+            }
         }
     }
 

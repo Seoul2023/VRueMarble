@@ -93,7 +93,7 @@ public class Board : MonoBehaviour
                 playerInWait.Money += movedMoney;
                 return -1;
             case BoardType.Teleport:
-                return (int)Random.Range(0, 23);
+                return (int)Random.Range(0, 24);
             case BoardType.Start:
                 return -1;
             case BoardType.Island:
