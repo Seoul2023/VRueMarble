@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     public TMP_Text money_text;
     public XROrigin xrOrigin;
-    public string name;
+    new public string name;
     private const int DEFAULTMONEY = 1000000;
     private const int MAXBOARDNUM = 24;
     private const float T = 3f; // flight time for Move()

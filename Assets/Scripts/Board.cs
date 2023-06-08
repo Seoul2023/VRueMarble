@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    [SerializeField] new private string name = "City";
+    public string Name
+    {
+        get { return name; }
+    }
     [SerializeField] private GroundFlag Flag;
     [SerializeField] private Structure Villa;
     [SerializeField] private Structure Building;

@@ -94,6 +94,7 @@ public class DecisionUI : MonoBehaviour
         moneyInHand = p.Money;
         MoneyInHandTMP.text = MoneyString(MoneyInHand, moneyInHand);
         target = b;
+        TitleTMP.text = b.Name;
         main.SetActive(true);
         LockToggles(target);
     }
