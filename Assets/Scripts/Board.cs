@@ -93,10 +93,13 @@ public class Board : MonoBehaviour
                 playerInWait.Money += movedMoney;
                 return -1;
             case BoardType.Teleport:
-                return (int)Random.Range(0, 24);
+                Debug.Log("Board: " + playerInTurn.ToString() + " teleported");
+                return Random.Range(0, 24);
             case BoardType.Start:
                 return -1;
             case BoardType.Island:
+                Debug.Log("Board: " + playerInTurn.ToString() + " is in Island");
+                playerInTurn.IslandCount = 3;
                 return -1;
             case BoardType.Olympic:
                 return -1;

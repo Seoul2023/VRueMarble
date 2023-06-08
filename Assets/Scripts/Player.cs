@@ -28,6 +28,12 @@ public class Player : MonoBehaviour
         set { curr_pos = (curr_pos + value) % MAXBOARDNUM; }
     }
     private List<Board> owned_boards;
+    private int islandCount = 0;
+    public int IslandCount
+    {
+        get { return islandCount; }
+        set { islandCount = value; }
+    }
 
     // Start is called before the first frame update
     void Start()

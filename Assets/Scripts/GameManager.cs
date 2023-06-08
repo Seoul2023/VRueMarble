@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         cpu_end
     }
     private const int MAXBOARDNUM = 24;
+    private const int BONUSMONEY = 200000;  // Money given when pass start board
 
     private GameState state = GameState.none;
     private int diceResult = 0;
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
             case GameState.player_rolling:
                 if(dice.IsRolled())
                 {
-                    Debug.Log("GM: dice rolled!");
+                    Debug.Log("GM: player rolled the dice!");
                     diceResult = dice.Result;
                     MovePlayer();
                 }
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
             case GameState.cpu_rolling:
                 if (dice.IsRolled())
                 {
-                    Debug.Log("GM: dice rolled!");
+                    Debug.Log("GM: cpu rolled the dice!");
                     diceResult = dice.Result;
                     MovePlayer();
                 }
@@ -95,10 +96,23 @@ public class GameManager : MonoBehaviour
         playerInWait = (state == GameState.player_rolling) ? cpu : player;
         state = (state == GameState.player_rolling) ? GameState.player_moving : GameState.cpu_moving;
 
-        target_pos = (playerInTurn.CurrentPosition + diceResult) % MAXBOARDNUM;
-        playerInTurn.CurrentPosition = target_pos;
-        skyboxChanger.SetSkybox(target_pos);
-        playerInTurn.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
+        if (playerInTurn.IslandCount > 0 && diceResult < 6)
+        {
+            EndTurn();
+        }
+        else
+        {
+            playerInTurn.IslandCount = 0;
+            target_pos = playerInTurn.CurrentPosition + diceResult;
+            if (target_pos >= MAXBOARDNUM)
+            {
+                target_pos %= MAXBOARDNUM;
+                playerInTurn.Money += BONUSMONEY;
+            }
+            playerInTurn.CurrentPosition = target_pos;
+            skyboxChanger.SetSkybox(target_pos);
+            playerInTurn.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
+        }
     }
 
     private void StartPlayerDecision(bool needToWait)
