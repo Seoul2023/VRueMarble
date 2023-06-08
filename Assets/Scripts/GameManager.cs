@@ -107,6 +107,15 @@ public class GameManager : MonoBehaviour
         else if (state == GameState.cpu_moving)
         {
             state = GameState.cpu_waiting;
+            // To do: cpu's Buy/Build decision
+            if (needToWait)
+            {
+
+            }
+            else
+            {
+                DoBoardWork();
+            }
         }
         else
         {
@@ -114,7 +123,8 @@ public class GameManager : MonoBehaviour
             EndTurn();
         }
     }
-    
+    // Work on Player's Buy/Build decision 
+    // Triggerd by OKButton in decision UI
     private void EndPlayerDecision()
     {
         if(state != GameState.player_waiting && state != GameState.cpu_waiting)
@@ -147,7 +157,7 @@ public class GameManager : MonoBehaviour
 
     private void DoBoardWork()
     {
-        state = GameState.player_do;
+        state = (state == GameState.player_waiting) ? GameState.player_do : GameState.cpu_do;
         int ret = map[target_pos].BoardWork(playerInTurn, playerInWait);
         if (ret != -1)
         {
@@ -158,16 +168,16 @@ public class GameManager : MonoBehaviour
     private void EndTurn()
     {
         Debug.Log("GM: End turn");
-        state = GameState.player_end;
+        state = (state <= GameState.player_end) ? GameState.player_end : GameState.cpu_end;
         if(IsEnd())
         {
             Debug.Log("GM: Game End!");
         }
         else
         {
-            dice.transform.position = player.transform.position;
+            dice.transform.position = playerInTurn.transform.position;
             dice.SetStateBeforeReady();
-            state = GameState.player_rolling;
+            state = (state == GameState.player_end) ? GameState.player_rolling : GameState.cpu_rolling;
         }
     }
 
