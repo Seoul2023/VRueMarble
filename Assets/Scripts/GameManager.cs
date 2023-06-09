@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     }
     private const int MAXBOARDNUM = 24;
     private const int BONUSMONEY = 200000;  // Money given when pass start board
+    private const int CPULOWERMONEY = 500000; //
 
     private GameState state = GameState.none;
     private int diceResult = 0;
@@ -140,11 +141,31 @@ public class GameManager : MonoBehaviour
         else if (state == GameState.cpu_moving)
         {
             state = GameState.cpu_waiting;
-            // To do: cpu's Buy/Build decision
             if (needToWait)
             {
+                int requiredMoney = 0;
+                List<bool> decisions = new List<bool>(new bool[] { 
+                    map[target_pos].Owner == null, 
+                    !map[target_pos].IsBuiltVilla(), 
+                    !map[target_pos].IsBuiltBuilding(), 
+                    !map[target_pos].IsBuiltHotel() 
+                });
+                for (int i = 3; i >= 0; i--)
+                {
+                    requiredMoney = map[target_pos].GetCost(decisions[0], decisions[1], decisions[2], decisions[3]);
+                    if (cpu.Money - requiredMoney < CPULOWERMONEY) break;
+                    decisions[i] = false;
+                }
 
-
+                cpu.Money -= requiredMoney;
+                if (decisions[0])
+                {
+                    cpu.AddBoard(map[target_pos]);
+                    map[target_pos].BuyGround();
+                }
+                if (decisions[1]) map[target_pos].BuildVilla();
+                if (decisions[2]) map[target_pos].BuildBuilding();
+                if (decisions[3]) map[target_pos].BuildHotel();
                 EndTurn();
             }
             else
