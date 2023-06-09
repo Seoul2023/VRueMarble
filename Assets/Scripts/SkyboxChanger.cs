@@ -2,24 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkyboxChangerBehaviour : MonoBehaviour
+public class SkyboxChanger : MonoBehaviour
 {
-    public enum Cities
-    {
-        Default,
-        Seoul,
-        Tokyo,
-        Paris,
-        Newyork
-    }    
     public Material[] skyboxMaterials;
 
-    private Cities currentCity = Cities.Default;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        RenderSettings.skybox = skyboxMaterials[0];
     }
 
     // Update is called once per frame
@@ -28,7 +19,7 @@ public class SkyboxChangerBehaviour : MonoBehaviour
         
     }
 
-    public void setSkybox(Cities newCity)
+    /*public void setSkybox(Cities newCity)
     {
         Debug.Log("set skybox: " + newCity);
         currentCity = newCity;
@@ -44,5 +35,10 @@ public class SkyboxChangerBehaviour : MonoBehaviour
     {
         currentCity = Cities.Tokyo;
         RenderSettings.skybox = skyboxMaterials[(int)currentCity];
+    }*/
+
+    public void SetSkybox(int position)
+    {
+        RenderSettings.skybox = skyboxMaterials[position];
     }
 }

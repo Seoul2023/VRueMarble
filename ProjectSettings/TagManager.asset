@@ -9,6 +9,7 @@ TagManager:
   - Destroyer
   - MiniWorldCamera
   - Water
+  - dice
   layers:
   - Default
   - TransparentFX
