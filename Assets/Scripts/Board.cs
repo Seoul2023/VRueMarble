@@ -80,10 +80,10 @@ public class Board : MonoBehaviour
                 next(false);
                 break;
             case BoardType.Olympic:
-                next(false);
+                next(true);
                 break;
             case BoardType.Airport:
-                OnPlayerAirport(player, next);
+                next(true);
                 break;
         }
     }
@@ -199,6 +199,14 @@ public class Board : MonoBehaviour
         Hotel.SetColor(owner.name != "cpu");
     }
 
+    public void SetRent2x()
+    {
+        ground_rent *= 2;
+        if (IsBuiltVilla()) Villa.Rent *= 2;
+        if (IsBuiltBuilding()) Building.Rent *= 2;
+        if (IsBuiltHotel()) Hotel.Rent *= 2;
+    }
+
     // Teleport type
 
     // Start type
@@ -208,9 +216,4 @@ public class Board : MonoBehaviour
     // Olympic type
 
     // Airport type
-    public void OnPlayerAirport(Player player, Action<Boolean> next)
-    {
-        // Todo: Make Airport UI and impl
-        next(true);
-    }
 }

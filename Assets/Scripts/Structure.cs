@@ -28,6 +28,7 @@ public class Structure : MonoBehaviour
     public int Rent
     {
         get { return rent; }
+        set { rent = value; }
     }
 
     // Start is called before the first frame update

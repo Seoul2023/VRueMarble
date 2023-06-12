@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Dice dice;
     [SerializeField] private SkyboxChanger skyboxChanger;
     [SerializeField] private DecisionUI decisionUI;
+    [SerializeField] private MapUI mapUI;
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +85,10 @@ public class GameManager : MonoBehaviour
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
         map = entire_map.GetComponentsInChildren<Board>();
         playerInTurn = player; playerInWait = cpu;
+        for(int i = 0; i < MAXBOARDNUM; i++)
+        {
+            mapUI.tiles[i].onClick.AddListener(() => EndMapDecision(i));
+        }
     }
 
     private void Reload()
@@ -131,7 +136,9 @@ public class GameManager : MonoBehaviour
             state = GameState.player_waiting;
             if (needToWait)
             {
-                decisionUI.TurnOn(player, map[target_pos]);
+                if (map[target_pos].type == Board.BoardType.City) decisionUI.TurnOn(player, map[target_pos]);
+                else if (map[target_pos].type == Board.BoardType.Airport) mapUI.TurnOn(map, "airport", player.CurrentPosition, cpu.CurrentPosition);
+                else if (map[target_pos].type == Board.BoardType.Olympic) mapUI.TurnOn(map, "olympic", player.CurrentPosition, cpu.CurrentPosition);
             }
             else
             {
@@ -209,6 +216,25 @@ public class GameManager : MonoBehaviour
         if (decisions[3]) map[target_pos].BuildHotel();
 
         EndTurn();
+    }
+
+    private void EndMapDecision(int boardNum)
+    {
+        if(map[playerInTurn.CurrentPosition].type == Board.BoardType.Airport)
+        {
+            playerInTurn.Move(map[boardNum], (b) => { EndTurn(); });
+        }
+        else if(map[playerInTurn.CurrentPosition].type == Board.BoardType.Olympic)
+        {
+            if(map[boardNum].Owner.name != playerInTurn.name)
+            {
+                mapUI.TurnOn(map, "olympic", player.CurrentPosition, cpu.CurrentPosition);
+                return;
+            }
+
+            map[boardNum].SetRent2x();
+            EndTurn();
+        }
     }
 
     private void DoBoardWork()
