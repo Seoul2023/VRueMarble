@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 using Unity.XR.CoreUtils;
 using TMPro;
 
@@ -10,10 +11,12 @@ public class Player : MonoBehaviour
     public TMP_Text money_text;
     public XROrigin xrOrigin;
     new public string name;
+    public PalmUI palmUI;
     private const int DEFAULTMONEY = 3000000;
     private const int MAXBOARDNUM = 24;
     private const float T = 3f; // flight time for Move()
     private const float g = 9.8f;
+    private InputDevice _targetDevice;
 
     private int money = 0;
     public int Money
@@ -40,14 +43,41 @@ public class Player : MonoBehaviour
     {
         this.money = DEFAULTMONEY;
         this.owned_boards = new List<Board>();
+        if(name == "player") TryInit();
+    }
+    void TryInit()
+    {
+        var inputDevices = new List<InputDevice>();
+        InputDeviceCharacteristics leftControllerCharacteristics =
+            InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller;
+        InputDevices.GetDevicesWithCharacteristics(leftControllerCharacteristics, inputDevices);
+
+        if (inputDevices.Count == 0)
+        {
+            return;
+        }
+
+        _targetDevice = inputDevices[0];
+        Debug.Log("Get Left controller");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (name == "player")
+        if (!_targetDevice.isValid)
         {
+            TryInit();
+        }
+        else
+        {
+            if (name == "cpu") return;
             money_text.text = "Money: " + money.ToString();
+            _targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue);
+            if (primaryButtonValue)
+            {
+                Debug.Log("pressing");
+            }
+            palmUI.SetActive(primaryButtonValue);
         }
     }
 

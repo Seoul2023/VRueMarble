@@ -21,18 +21,20 @@ public class GameManager : MonoBehaviour
     }
     private const int MAXBOARDNUM = 24;
     private const int BONUSMONEY = 200000;  // Money given when pass start board
+    private const int CPULOWERMONEY = 500000; //
 
     private GameState state = GameState.none;
     private int diceResult = 0;
     private int target_pos = 0;
 
-    [SerializeField] private Player player, cpu;
+    [SerializeField] public Player player, cpu;
     private Player playerInTurn, playerInWait;
     [SerializeField] private GameObject entire_map;
-    private Board[] map;
+    public Board[] map;
     [SerializeField] private Dice dice;
     [SerializeField] private SkyboxChanger skyboxChanger;
     [SerializeField] private DecisionUI decisionUI;
+    [SerializeField] private MapUI mapUI;
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +85,11 @@ public class GameManager : MonoBehaviour
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
         map = entire_map.GetComponentsInChildren<Board>();
         playerInTurn = player; playerInWait = cpu;
+        for(int i = 0; i < MAXBOARDNUM; i++)
+        {
+            int idx = i;
+            mapUI.tiles[i].onClick.AddListener(() => EndMapDecision(idx));
+        }
     }
 
     private void Reload()
@@ -104,6 +111,8 @@ public class GameManager : MonoBehaviour
 
         if (playerInTurn.IslandCount > 0 && diceResult < 6)
         {
+            Debug.Log("player is in island. Island count: " + playerInTurn.IslandCount.ToString());
+            playerInTurn.IslandCount -= 1;
             EndTurn();
         }
         else
@@ -117,7 +126,6 @@ public class GameManager : MonoBehaviour
                 playerInTurn.Money += BONUSMONEY;
             }
             playerInTurn.CurrentPosition = target_pos;
-            skyboxChanger.SetSkybox(target_pos);
             playerInTurn.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
         }
     }
@@ -128,9 +136,12 @@ public class GameManager : MonoBehaviour
         if (state == GameState.player_moving)
         {
             state = GameState.player_waiting;
+            skyboxChanger.SetSkybox(target_pos);
             if (needToWait)
             {
-                decisionUI.TurnOn(player, map[target_pos]);
+                if (map[target_pos].type == Board.BoardType.City) decisionUI.TurnOn(player, map[target_pos]);
+                else if (map[target_pos].type == Board.BoardType.Airport) mapUI.TurnOn(map, "airport", player.CurrentPosition, cpu.CurrentPosition);
+                else if (map[target_pos].type == Board.BoardType.Olympic) mapUI.TurnOn(map, "olympic", player.CurrentPosition, cpu.CurrentPosition);
             }
             else
             {
@@ -140,11 +151,31 @@ public class GameManager : MonoBehaviour
         else if (state == GameState.cpu_moving)
         {
             state = GameState.cpu_waiting;
-            // To do: cpu's Buy/Build decision
             if (needToWait)
             {
+                int requiredMoney = 0;
+                List<bool> decisions = new List<bool>(new bool[] { 
+                    map[target_pos].Owner == null, 
+                    !map[target_pos].IsBuiltVilla(), 
+                    !map[target_pos].IsBuiltBuilding(), 
+                    !map[target_pos].IsBuiltHotel() 
+                });
+                for (int i = 3; i >= 0; i--)
+                {
+                    requiredMoney = map[target_pos].GetCost(decisions[0], decisions[1], decisions[2], decisions[3]);
+                    if (cpu.Money - requiredMoney >= CPULOWERMONEY) break;
+                    decisions[i] = false;
+                }
 
-
+                cpu.Money -= requiredMoney;
+                if (decisions[0])
+                {
+                    cpu.AddBoard(map[target_pos]);
+                    map[target_pos].BuyGround();
+                }
+                if (decisions[1]) map[target_pos].BuildVilla();
+                if (decisions[2]) map[target_pos].BuildBuilding();
+                if (decisions[3]) map[target_pos].BuildHotel();
                 EndTurn();
             }
             else
@@ -190,13 +221,35 @@ public class GameManager : MonoBehaviour
         EndTurn();
     }
 
+    private void EndMapDecision(int boardNum)
+    {
+        if(map[playerInTurn.CurrentPosition].type == Board.BoardType.Airport)
+        {
+            playerInTurn.Move(map[boardNum], (b) => { EndTurn(); });
+        }
+        else if(map[playerInTurn.CurrentPosition].type == Board.BoardType.Olympic)
+        {
+            if(map[boardNum].Owner.name != playerInTurn.name)
+            {
+                mapUI.TurnOn(map, "olympic", player.CurrentPosition, cpu.CurrentPosition);
+                return;
+            }
+
+            map[boardNum].SetRent2x();
+            EndTurn();
+        }
+    }
+
     private void DoBoardWork()
     {
+        Debug.Log("GM: Do board work");
         state = (state == GameState.player_waiting) ? GameState.player_do : GameState.cpu_do;
         int ret = map[target_pos].BoardWork(playerInTurn, playerInWait);
         if (ret != -1)
         {
             // teleport board
+            playerInTurn.CurrentPosition = ret;
+            skyboxChanger.SetSkybox(ret);
             playerInTurn.Move(map[ret], (b) => { EndTurn(); });
         } else { EndTurn(); }
     }
@@ -207,6 +260,8 @@ public class GameManager : MonoBehaviour
         state = (state <= GameState.player_end) ? GameState.player_end : GameState.cpu_end;
         if(IsEnd())
         {
+            Debug.Log("player: " + player.Money.ToString());
+            Debug.Log("cpu: " + cpu.Money.ToString());
             Debug.Log("GM: Game End!");
         }
         else

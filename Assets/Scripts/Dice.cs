@@ -46,7 +46,6 @@ public class Dice : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("dice collision");
         hitSound.Play();
     }
 
