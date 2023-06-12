@@ -84,6 +84,10 @@ public class GameManager : MonoBehaviour
         state = GameState.player_rolling;
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
         map = entire_map.GetComponentsInChildren<Board>();
+        foreach(Board b in map)
+        {
+            Debug.Log(b.ToString());
+        }
         playerInTurn = player; playerInWait = cpu;
         for(int i = 0; i < MAXBOARDNUM; i++)
         {
@@ -110,6 +114,8 @@ public class GameManager : MonoBehaviour
 
         if (playerInTurn.IslandCount > 0 && diceResult < 6)
         {
+            Debug.Log("player is in island. Island count: " + playerInTurn.IslandCount.ToString());
+            playerInTurn.IslandCount -= 1;
             EndTurn();
         }
         else
@@ -123,7 +129,6 @@ public class GameManager : MonoBehaviour
                 playerInTurn.Money += BONUSMONEY;
             }
             playerInTurn.CurrentPosition = target_pos;
-            skyboxChanger.SetSkybox(target_pos);
             playerInTurn.Move(map[target_pos], (b) => { StartPlayerDecision(b); });
         }
     }
@@ -134,6 +139,7 @@ public class GameManager : MonoBehaviour
         if (state == GameState.player_moving)
         {
             state = GameState.player_waiting;
+            skyboxChanger.SetSkybox(target_pos);
             if (needToWait)
             {
                 if (map[target_pos].type == Board.BoardType.City) decisionUI.TurnOn(player, map[target_pos]);
@@ -160,7 +166,7 @@ public class GameManager : MonoBehaviour
                 for (int i = 3; i >= 0; i--)
                 {
                     requiredMoney = map[target_pos].GetCost(decisions[0], decisions[1], decisions[2], decisions[3]);
-                    if (cpu.Money - requiredMoney < CPULOWERMONEY) break;
+                    if (cpu.Money - requiredMoney >= CPULOWERMONEY) break;
                     decisions[i] = false;
                 }
 
@@ -239,11 +245,14 @@ public class GameManager : MonoBehaviour
 
     private void DoBoardWork()
     {
+        Debug.Log("GM: Do board work");
         state = (state == GameState.player_waiting) ? GameState.player_do : GameState.cpu_do;
         int ret = map[target_pos].BoardWork(playerInTurn, playerInWait);
         if (ret != -1)
         {
             // teleport board
+            playerInTurn.CurrentPosition = ret;
+            skyboxChanger.SetSkybox(ret);
             playerInTurn.Move(map[ret], (b) => { EndTurn(); });
         } else { EndTurn(); }
     }
@@ -254,6 +263,8 @@ public class GameManager : MonoBehaviour
         state = (state <= GameState.player_end) ? GameState.player_end : GameState.cpu_end;
         if(IsEnd())
         {
+            Debug.Log("player: " + player.Money.ToString());
+            Debug.Log("cpu: " + cpu.Money.ToString());
             Debug.Log("GM: Game End!");
         }
         else

@@ -94,8 +94,10 @@ public class Board : MonoBehaviour
         {
             case BoardType.City:
                 int movedMoney = GetToll();
+                Debug.Log("Board: Board work of city, money before: " + playerInTurn.Money.ToString());
                 playerInTurn.Money -= movedMoney;
                 playerInWait.Money += movedMoney;
+                Debug.Log("Board: money after: " + playerInTurn.Money.ToString());
                 return -1;
             case BoardType.Teleport:
                 Debug.Log("Board: " + playerInTurn.ToString() + " teleported");

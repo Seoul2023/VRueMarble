@@ -16,6 +16,7 @@ public class MapUI : MonoBehaviour
     public Button[] tiles;
 
     private Board[] map;
+    private ColorBlock colorBlock;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +34,7 @@ public class MapUI : MonoBehaviour
         map = m;
         Board cur;
         Vector3 cur_pos;
-        ColorBlock colorBlock = tiles[0].colors;
+
         // title
         if (type == "olympic") title.text = "Where will the next Olympic be held?";
         else if (type == "airport") title.text = "Where will you fly to?";
@@ -43,12 +44,12 @@ public class MapUI : MonoBehaviour
         {
             cur = map[i];
             cur_pos = new Vector3(tiles[i].transform.position.x, tiles[i].transform.position.y, tiles[i].transform.position.z);
-            colorBlock = tiles[0].colors;
+            colorBlock = tiles[i].colors;
             if (cur.type != Board.BoardType.City) continue;
             // set color
-            if (cur.Owner.name == "player") colorBlock.normalColor = new Color(0f, 0f, 1f, 0.5f);
-            else if (cur.Owner.name == "cpu") colorBlock.normalColor = new Color(1f, 0f, 0f, 0.5f);
-            tiles[i].colors = colorBlock;
+            //if (cur.Owner.name == "player") colorBlock.normalColor = new Color(0f, 0f, 1f, 0.5f);
+            //else if (cur.Owner.name == "cpu") colorBlock.normalColor = new Color(1f, 0f, 0f, 0.5f);
+            //tiles[i].colors = colorBlock;
             // set structure images
             if(cur.IsBuiltVilla())
             {
