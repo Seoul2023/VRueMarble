@@ -27,10 +27,10 @@ public class GameManager : MonoBehaviour
     private int diceResult = 0;
     private int target_pos = 0;
 
-    [SerializeField] private Player player, cpu;
+    [SerializeField] public Player player, cpu;
     private Player playerInTurn, playerInWait;
     [SerializeField] private GameObject entire_map;
-    private Board[] map;
+    public Board[] map;
     [SerializeField] private Dice dice;
     [SerializeField] private SkyboxChanger skyboxChanger;
     [SerializeField] private DecisionUI decisionUI;
@@ -84,14 +84,11 @@ public class GameManager : MonoBehaviour
         state = GameState.player_rolling;
         decisionUI.OKButton.onClick.AddListener(EndPlayerDecision);
         map = entire_map.GetComponentsInChildren<Board>();
-        foreach(Board b in map)
-        {
-            Debug.Log(b.ToString());
-        }
         playerInTurn = player; playerInWait = cpu;
         for(int i = 0; i < MAXBOARDNUM; i++)
         {
-            mapUI.tiles[i].onClick.AddListener(() => EndMapDecision(i));
+            int idx = i;
+            mapUI.tiles[i].onClick.AddListener(() => EndMapDecision(idx));
         }
     }
 

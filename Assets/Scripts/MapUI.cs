@@ -40,7 +40,7 @@ public class MapUI : MonoBehaviour
         else if (type == "airport") title.text = "Where will you fly to?";
         else title.text = "Map";
         // board
-        for (int i = 0; i < map.Length; i++)
+        /*for (int i = 0; i < map.Length; i++)
         {
             cur = map[i];
             cur_pos = new Vector3(tiles[i].transform.position.x, tiles[i].transform.position.y, tiles[i].transform.position.z);
@@ -71,7 +71,7 @@ public class MapUI : MonoBehaviour
         Vector3 pos = tiles[playerPos].transform.position;
         playerImage.transform.position = new Vector3(pos.x, pos.y, pos.z);
         pos = tiles[cpuPos].transform.position;
-        cpuImage.transform.position = new Vector3(pos.x, pos.y, pos.z);
+        cpuImage.transform.position = new Vector3(pos.x, pos.y, pos.z);*/
 
         main.SetActive(true);
     }
